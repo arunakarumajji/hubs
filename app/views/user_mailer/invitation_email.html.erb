@@ -1,0 +1,20 @@
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+  <%= @email_config.body.html_safe %>
+
+  <p style="margin-top: 20px;">
+    <a href="<%= @signup_url %>" style="background-color: #4CAF50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;">
+      Complete Registration
+    </a>
+  </p>
+
+  <p style="color: #666; font-size: 12px; margin-top: 30px;">
+    This email was sent from <%= @hub.name %> Hub.
+  </p>
+</div>
+</body>
+</html>

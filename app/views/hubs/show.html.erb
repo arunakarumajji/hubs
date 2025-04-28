@@ -1,0 +1,62 @@
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-2"><%= @hub.name %></h1>
+  <p class="text-gray-600 mb-6"><%= @hub.description %></p>
+
+  <% if admin_logged_in? && current_admin.hub_id == @hub.id %>
+    <div class="flex space-x-4 mb-8">
+      <%= link_to "Edit Hub", edit_hub_path(@hub), class: "bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" %>
+
+      <% if @hub.email_configs.exists? %>
+        <%= link_to "Edit Email Config", edit_hub_email_config_path(@hub, @hub.email_configs.first), class: "bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded" %>
+      <% else %>
+        <%= link_to "Set Up Email", new_hub_email_config_path(@hub), class: "bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded" %>
+      <% end %>
+
+      <%= link_to "Manage Users", hub_users_path(@hub), class: "bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded" %>
+    </div>
+
+    <% if @users && @users.any? %>
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">User Management</h2>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white">
+            <thead class="bg-gray-100">
+            <tr>
+              <th class="py-2 px-4 text-left">Name</th>
+              <th class="py-2 px-4 text-left">Email</th>
+              <th class="py-2 px-4 text-left">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @users.each do |user| %>
+              <tr class="border-b">
+                <td class="py-2 px-4"><%= user.full_name.present? ? user.full_name : "Not completed" %></td>
+                <td class="py-2 px-4"><%= user.email %></td>
+                <td class="py-2 px-4">
+                    <span class="<%= user.active? ? 'text-green-600' : (user.pending? ? 'text-yellow-600' : 'text-red-600') %>">
+                      <%= user.status.capitalize %>
+                    </span>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <% if @hub.email_configs.exists? && @users.pending.any? %>
+          <div class="mt-4">
+            <%= button_to "Send Invitations", send_invites_hub_users_path(@hub, email_config_id: @hub.email_configs.first.id), class: "bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded" %>
+
+            <%#= button_to "Send Invitations", send_invites_hub_users_path(@hub, email_config_id: @hub.email_configs.first.id), class: "bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= link_to "Back to All Hubs", hubs_path, class: "text-blue-500 hover:text-blue-700" %>
+  </div>
+</div>
