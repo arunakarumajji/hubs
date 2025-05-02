@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    @user = @hub.users.new
   end
 
   def create
@@ -50,12 +50,17 @@ class UsersController < ApplicationController
   end
 
   def complete_signup
+    @user.password = params[:user][:password]
+    @user.password_confirmation = params[:user][:password_confirmation]
+    session[:user_id] = @user.id
     if @user&.update(user_signup_params.merge(status: :active))
-      redirect_to root_path, notice: "Registration complete! You can now access the hub."
+      redirect_to hub_user_challenges_path(@hub, @user) , notice: "Registration complete! You can now access the hub."
     else
       render :signup, status: :unprocessable_entity
     end
   end
+
+
 
   private
 
@@ -80,6 +85,6 @@ class UsersController < ApplicationController
   end
 
   def user_signup_params
-    params.require(:user).permit(:first_name, :last_name)
+    params.require(:user).permit(:first_name, :last_name, :password, :password_confirmation)
   end
 end

@@ -84,3 +84,6 @@ group :development do
   gem "letter_opener"
 end
 
+gem 'image_processing', '~> 1.2'
+
+gem 'faker'

@@ -17,10 +17,35 @@ Rails.application.routes.draw do
         patch :complete_signup # Becomes /users/:id/complete_signup
       end
     end
+    resources :challenges do
+      member do
+        get :assign
+        post :process_assignment
+      end
+    end
+    # User-facing challenge routes
+    resources :user_challenges, path: 'users/:user_id/challenges', only: [:index, :show] do
+      member do
+        post :complete
+      end
+    end
   end
+  # Admin challenge management
+  # resources :challenges do
+  #   post :assign, on: :member
+  # end
+
+
+  # Admin authentication
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+  # User authentication
+  get '/user/login', to: 'user_sessions#new', as: 'user_login'
+  post '/user/login', to: 'user_sessions#create'
+  delete '/user/logout', to: 'user_sessions#destroy', as: 'user_logout'
+
+
   # Route for user signup via email link
   get 'hubs/:hub_slug/signup/:user_id', to: 'users#signup', as: 'user_signup'
   patch 'hubs/:hub_slug/complete_signup/:user_id', to: 'users#complete_signup', as: 'complete_user_signup'

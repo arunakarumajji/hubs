@@ -27,8 +27,15 @@
             Logged in as <%= current_admin.full_name %> (<%= current_admin.hub.name %>)
           </div>
           <%= button_to "Log Out", logout_path, method: :delete, class: "text-red-500 hover:text-red-700", form: { class: "inline" } %>
+        <% elsif user_logged_in? %>
+          <div class="mr-4 text-sm text-gray-600">
+            Logged in as <%= current_user.full_name %>
+          </div>
+          <%= link_to "My Challenges", hub_user_challenges_path(current_user.hub, current_user), class: "text-blue-500 hover:text-blue-700 mr-4" %>
+          <%= button_to "Log Out", user_logout_path, method: :delete, class: "text-red-500 hover:text-red-700", form: { class: "inline" } %>
         <% else %>
           <%= link_to "Admin Login", login_path, class: "text-blue-500 hover:text-blue-700" %>
+          <%= link_to "User Login", user_login_path, class: "ml-4 text-blue-500 hover:text-blue-700" %>
         <% end %>
       </div>
     </div>

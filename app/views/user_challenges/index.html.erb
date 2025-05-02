@@ -1,0 +1,76 @@
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Your Challenges</h1>
+    <div class="text-xl font-medium text-green-600">
+      Total Points: <%= @total_points %>
+    </div>
+  </div>
+
+  <% if @pending_challenges.any? %>
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Pending Challenges</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <% @pending_challenges.each do |challenge| %>
+          <div class="border rounded-lg overflow-hidden shadow-sm">
+            <% if challenge.image.present? %>
+              <div class="h-48 bg-gray-200 overflow-hidden">
+                <%= image_tag challenge.image, class: "w-full h-full object-cover" %>
+              </div>
+            <% end %>
+
+            <div class="p-4">
+              <h3 class="text-xl font-semibold mb-2"><%= challenge.title %></h3>
+              <p class="text-gray-600 mb-2"><%= challenge.description %></p>
+              <p class="text-green-600 font-medium mb-4"><%= pluralize(challenge.points, 'point') %></p>
+
+              <div class="flex justify-between">
+                <%= link_to "View Challenge", hub_user_challenge_path(@hub, @user, challenge), class: "bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="p-4 bg-gray-50 rounded text-center mb-8">
+      <p class="text-gray-600">You have no pending challenges.</p>
+    </div>
+  <% end %>
+
+  <% if @completed_challenges.any? %>
+    <div>
+      <h2 class="text-2xl font-semibold mb-4">Completed Challenges</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <% @completed_challenges.each do |challenge| %>
+          <div class="border rounded-lg overflow-hidden shadow-sm bg-gray-50">
+            <% if challenge.image.present? %>
+              <div class="h-48 bg-gray-200 overflow-hidden opacity-75">
+                <img src="<%= challenge.image %>" alt="<%= challenge.title %>" class="w-full h-full object-cover">
+              </div>
+            <% end %>
+
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-semibold"><%= challenge.title %></h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Completed
+                </span>
+              </div>
+              <p class="text-gray-600 mb-2"><%= challenge.description %></p>
+              <p class="text-green-600 font-medium">
+                <%= pluralize(challenge.points, 'point') %> earned
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-8">
+    <%= button_to "Log Out", user_logout_path, method: :delete, class: "text-red-500 hover:text-red-700" %>
+  </div>
+</div>

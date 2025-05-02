@@ -7,3 +7,19 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+require 'open-uri'
+
+challenge = Challenge.create!(
+  hub: Faker::Company.name,
+  title: Faker::Company.catch_phrase,
+  description: Faker::Lorem.paragraph,
+  sharing_link: Faker::Internet.url,
+  points: 100
+  )
+
+challenge.image.attach(
+  io: URI.open(Faker::Company.logo),
+  filename: Faker::Company.name+".jpg",
+  content_type: "image/jpg"
+)
