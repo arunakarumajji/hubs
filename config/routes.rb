@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :hubs do
     resources :admins, only: [:new, :create]
     resources :email_configs
+    resources :activities, only: [:index]
 
     resources :users do
       # Collection routes operate on the entire resource collection (no ID required):

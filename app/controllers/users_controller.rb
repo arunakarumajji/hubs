@@ -52,6 +52,13 @@ class UsersController < ApplicationController
   def complete_signup
     @user.password = params[:user][:password]
     @user.password_confirmation = params[:user][:password_confirmation]
+    # Create activity for new user signup
+    Activity.create(
+      action: Activity::USER_JOINED,
+      user: @user,
+      hub: @hub,
+      data: { name: @user.full_name, email: @user.email }
+    )
     session[:user_id] = @user.id
     if @user&.update(user_signup_params.merge(status: :active))
       redirect_to hub_user_challenges_path(@hub, @user) , notice: "Registration complete! You can now access the hub."

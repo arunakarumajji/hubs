@@ -39,6 +39,19 @@ class UserChallengesController < ApplicationController
          uc.completed = true
           uc.points_awarded = @challenge.points
        end
+       # Create activity record
+       Activity.create(
+         action: Activity::CHALLENGE_COMPLETED,
+         user: @user,
+         hub: @hub,
+         trackable: @challenge,
+         data: {
+           challenge_title: @challenge.title,
+           challenge_type: @challenge.challenge_type,
+           points: @challenge.points
+         }
+       )
+
        redirect_to hub_user_challenges_path(@hub, @user), notice: "Challenge completed! You earned #{@user_challenge.points_awarded} points."
      else
        redirect_to hub_user_challenges_path(@hub, @user), alert: "You can't complete this challenge."

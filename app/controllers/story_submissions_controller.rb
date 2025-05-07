@@ -19,6 +19,18 @@ class StorySubmissionsController < ApplicationController
     # Mark the challenge as completed and award points
     user_challenge = UserChallenge.find_or_create_by(user: current_user, challenge: @challenge)
     user_challenge.update(completed: true, points_awarded: @challenge.points)
+    # Create activity record
+    Activity.create(
+      action: Activity::STORY_SUBMITTED,
+      user: current_user,
+      hub: @hub,
+      trackable: @story_submission,
+      data: {
+        challenge_title: @challenge.title,
+        story_title: @story_submission.title,
+        points: @challenge.points
+      }
+    )
 
     redirect_to thank_you_hub_challenge_path(@hub, @challenge), notice: "Story submitted successfully! You earned #{@challenge.points} points."
   else
