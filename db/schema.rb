@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_165734) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_05_195718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,6 +62,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_165734) do
     t.bigint "hub_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "execution_limit"
+    t.integer "challenge_type"
+    t.index ["challenge_type"], name: "index_challenges_on_challenge_type"
     t.index ["hub_id"], name: "index_challenges_on_hub_id"
   end
 
@@ -81,6 +84,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_165734) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "story_submissions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "challenge_id", null: false
+    t.string "title"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_story_submissions_on_challenge_id"
+    t.index ["user_id"], name: "index_story_submissions_on_user_id"
   end
 
   create_table "user_challenges", force: :cascade do |t|
@@ -112,6 +126,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_165734) do
   add_foreign_key "admins", "hubs"
   add_foreign_key "challenges", "hubs"
   add_foreign_key "email_configs", "hubs"
+  add_foreign_key "story_submissions", "challenges"
+  add_foreign_key "story_submissions", "users"
   add_foreign_key "user_challenges", "challenges"
   add_foreign_key "user_challenges", "users"
   add_foreign_key "users", "hubs"

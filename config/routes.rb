@@ -21,7 +21,9 @@ Rails.application.routes.draw do
       member do
         get :assign
         post :process_assignment
+        get :thank_you
       end
+      resources :story_submissions, only: [:new, :create]
     end
     # User-facing challenge routes
     resources :user_challenges, path: 'users/:user_id/challenges', only: [:index, :show] do

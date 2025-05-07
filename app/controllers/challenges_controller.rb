@@ -10,10 +10,16 @@ end
 
 def new
   @challenge = @hub.challenges.new
+  # Set a default challenge type
+  @challenge.challenge_type = 'share_link'
 end
 
 def create
   @challenge = @hub.challenges.new(challenge_params)
+
+
+  Rails.logger.debug "Challenge params: #{challenge_params.inspect}"
+  Rails.logger.debug "Challenge type: #{@challenge.challenge_type}"
 
   if @challenge.save
     @hub.users.active.each do |user|
@@ -22,6 +28,7 @@ def create
     end
     redirect_to hub_challenges_path(@hub), notice: "Challenge created successfully"
   else
+    Rails.logger.debug "Challenge full error message:#{@challenge.errors.full_messages}"
     render :new, status: :unprocessable_entity
   end
 end
@@ -91,6 +98,6 @@ def check_admin_permission
 end
 
 def challenge_params
-  params.require(:challenge).permit(:title, :description, :sharing_link, :image, :points)
+  params.require(:challenge).permit(:title, :description, :sharing_link, :image, :points, :challenge_type, :execution_limit)
 end
 end

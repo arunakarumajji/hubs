@@ -20,13 +20,29 @@ class UserChallengesController < ApplicationController
     @total_points = @user.user_challenges.where(completed: true).sum(:points_awarded)
   end
 
+
   def show
-    @challenge = @user_challenge.challenge
+    @challenge = Challenge.find(params[:id])
+    @can_execute = @challenge.user_can_execute?(@user)
+
+    # For story challenges, redirect to the story submission form
+    if @challenge.challenge_type == "story" && @can_execute
+      redirect_to new_hub_challenge_story_submission_path(@hub, @challenge)
+    end
   end
 
   def complete
-    @user_challenge.complete!
-    redirect_to hub_user_challenges_path(@hub, @user), notice: "Challenge completed! You earned #{@user_challenge.points_awarded} points."
+
+    # For share_link type challenges only
+     if @challenge.share_link? && @challenge.user_can_execute?(@user)
+       UserChallenge.find_or_create_by(user: @user, challenge: @challenge) do |uc|
+         uc.completed = true
+          uc.points_awarded = @challenge.points
+       end
+       redirect_to hub_user_challenges_path(@hub, @user), notice: "Challenge completed! You earned #{@user_challenge.points_awarded} points."
+     else
+       redirect_to hub_user_challenges_path(@hub, @user), alert: "You can't complete this challenge."
+     end
   end
 
   private

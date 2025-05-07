@@ -1,0 +1,16 @@
+
+<div class="max-w-2xl mx-auto px-4 py-8 text-center">
+  <div class="mb-8">
+    <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </div>
+
+  <h1 class="text-3xl font-bold mb-4">Thank You!</h1>
+  <p class="text-xl text-gray-600 mb-6">Your story has been successfully submitted.</p>
+  <p class="text-lg text-green-600 font-medium mb-6">
+    You earned <%= @challenge.points %> points for completing this challenge!
+  </p>
+
+  <%= link_to "Back to Challenges", hub_user_challenges_path(@hub, current_user), class: "bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" %>
+</div>
