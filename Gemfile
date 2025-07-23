@@ -69,7 +69,7 @@ end
 gem "tailwindcss-rails"
 
 # Background jobs
-gem "sidekiq", "~> 7.0"
+gem "sidekiq", "~> 8.0"
 
 # Additional utilities
 gem "redis", "~> 5.0"
